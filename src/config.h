@@ -11,7 +11,7 @@
 
 /**\def MEASURED_TIMES 
 * Measure time for several CUDA kernels (cmakedefine) */
-/* #undef MEASURED_TIMES */
+#define MEASURED_TIMES 
 
 /**\def MILLI_SEC 
 * Measure time in milli seconds (else seconds) (cmakedefine)*/

@@ -1,5 +1,5 @@
 #test cmake version
-cmake_minimum_required(VERSION 2.6.2)
+cmake_minimum_required(VERSION 3.16)
 
 
 SET(CMAKE_VERBOSE_MAKEFILE ON)
@@ -31,7 +31,7 @@ SET(PROJ_INCLUDE_DIR "${PROJ_PATH}/src")
 SET(PROJ_EXAMPLE_DIR "${PROJ_PATH}/src")
 SET(PROJ_EXAMPLE_FILE "simpleTest")
 
-PROJECT(${PROJ_NAME})
+PROJECT(${PROJ_NAME} LANGUAGES CXX CUDA C)
 message("\nProject: ${PROJ_NAME}")
 
 message("-- INFO: proj_path: ${PROJ_PATH}")
@@ -60,68 +60,6 @@ set(cunfft_VERSION_MINOR 0)
 set(cunfft_BUILD_VERSION 0)
 SET(cunfft_VERSION "${cunfft_VERSION_MAJOR}.${cunfft_VERSION_MINOR}.${cunfft_BUILD_VERSION}" )
 
-# modul path findcuda
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModule/cuda" ${CMAKE_MODULE_PATH})
-
-message(STATUS "CHECK cuda installation, set paths...")
-find_package(CUDA 1.3 REQUIRED)
-#find_package(CUDA QUIET REQUIRED)
-# path setting by findCUDA
-message(STATUS "SET PATH CUDA_SDK_ROOT_DIR = ${CUDA_SDK_ROOT_DIR}")
-message(STATUS "SET PATH CUDA_TOOLKIT_ROOT_DIR = ${CUDA_TOOLKIT_ROOT_DIR}")
-message(STATUS "SET PATH CUDA_NVCC_EXECUTABLE = ${CUDA_NVCC_EXECUTABLE}")
-message(STATUS "SET PATH CUDA_TOOLKIT_INCLUDE = ${CUDA_TOOLKIT_INCLUDE}\n")
-message(STATUS "SET PATH CUDA_CUDA_LIBRARY = ${CUDA_CUDA_LIBRARY}")
-message(STATUS "SET PATH CUDA_CUDART_LIBRARY = ${CUDA_CUDART_LIBRARY}")
-message(STATUS "SET PATH CUDA_cufft_LIBRARY = ${CUDA_cufft_LIBRARY}")
-message(STATUS "SET PATH CUDA_CUT_LIBRARY = ${CUDA_CUT_LIBRARIES}\n")
-
-#############################################################
-# test if all paths and libs found
-#############################################################
-if(NOT CUDA_SDK_ROOT_DIR)
-	LIST(APPEND MISSING_PATHS "CUDA_SDK_ROOT_DIR")
-endif()
-if(NOT CUDA_TOOLKIT_ROOT_DIR)
-	LIST(APPEND MISSING_PATHS "CUDA_TOOLKIT_ROOT_DIR")
-endif()
-if(NOT CUDA_NVCC_EXECUTABLE)
-	LIST(APPEND MISSING_PATHS "CUDA_NVCC_EXECUTABLE")
-endif()
-if(NOT CUDA_TOOLKIT_INCLUDE)
-	LIST(APPEND MISSING_PATHS "CUDA_TOOLKIT_INCLUDE")
-endif()
-if(NOT CUDA_CUDA_LIBRARY)
-	LIST(APPEND MISSING_PATHS "CUDA_CUDA_LIBRARY")
-endif()
-if(NOT CUDA_CUDART_LIBRARY)
-	LIST(APPEND MISSING_PATHS "CUDA_CUDART_LIBRARY")
-endif()
-if(NOT CUDA_cufft_LIBRARY)
-	LIST(APPEND MISSING_PATHS "CUDA_cufft_LIBRARY")
-endif()
-if(NOT CUDA_CUT_LIBRARIES)
-	LIST(APPEND MISSING_PATHS "CUDA_CUT_LIBRARIES")
-endif()
-
-if (CUDA_FOUND)
-	list(LENGTH MISSING_PATHS LSIZE)
-	
-	if(LSIZE GREATER 0)
-		message("ERROR CHECK cuda installation -- NOT COMPLETE!")
-		message("ERROR: Can't set paths of cuda installation: ${MISSING_PATHS}\n")
-		LOCATEPATH("${MISSING_PATHS}")
-    	message(FATAL_ERROR "")
-	else()
-	   message(STATUS "FINISHED cuda installation -- OK\n")
-	endif()
-else()
-	message(FATAL_ERROR "ERROR cuda installation or paths -- NOT FOUND\n")
-endif()
-
-#############################################################
-# check compiler version
-#############################################################
 
 IF(CMAKE_COMPILER_IS_GNUCC)
     # get version of compiler

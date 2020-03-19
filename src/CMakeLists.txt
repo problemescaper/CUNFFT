@@ -1,23 +1,4 @@
 
-
-#INCLUDE_DIRECTORIES("/home/math/sukunis/NFFT_REPO/nfft/lib/branches/nfft-3.3/include")
-#LINK_DIRECTORIES("/home/math/sukunis/NFFT_REPO/nfft/lib/branches/nfft-3.3/.libs")
-
-
-# check included c header can be found
-FIND_FILE(STD_FILE stdio.h)
-message(STATUS "CHECK PATH stdio.h: ${STD_FILE}")
-FIND_FILE(COMPLEX_FILE complex.h)
-message(STATUS "CHECK PATH complex.h: ${COMPLEX_FILE}")
-FIND_FILE(TIME_FILE time.h)
-message(STATUS "CHECK PATH time.h: ${TIME_FILE}")
-FIND_FILE(MATH_FILE math.h)
-message(STATUS "CHECK PATH math.h: ${MATH_FILE}")
-FIND_FILE(STDLIB_FILE stdlib.h)
-message(STATUS "CHECK PATH stdlib.h: ${STDLIB_FILE}\n")
-
-
-
 # src inc header 
 INCLUDE_DIRECTORIES(${PROJ_INCLUDE_DIR})
 #CUDA_INCLUDE_DIRECTORIES("/usr/local/cuda-5.5/samples/common/inc/")
@@ -48,37 +29,22 @@ else(CUFFT_INC_DIR)
 endif(CUFFT_INC_DIR)
 
 
-# checking cuda libs can be found
-if(CUDA_CUDA_LIBRARY)
-	message(STATUS "CHECK PATH cuda library: ${CUDA_CUDA_LIBRARY}")
-else(CUDA_CUDA_LIBRARY)
-	LOCATE(libcuda libcuda. CUDA_CUDA_LIBRARY)
-endif(CUDA_CUDA_LIBRARY)
 
-if(CUDA_CUDART_LIBRARY)
-	message(STATUS "CHECK PATH cudart library: ${CUDA_CUDART_LIBRARY}")
-else(CUDA_CUDART_LIBRARY)
-	LOCATE(libcudart libcudart. CUDA_CUDART_LIBRARY)
-endif(CUDA_CUDART_LIBRARY)
-
-if(CUDA_cufft_LIBRARY)
-	message(STATUS "CHECK PATH cufft library: ${CUDA_cufft_LIBRARY}\n")
-else(CUDA_cufft_LIBRARY)
-	LOCATE(libcufft libcufft. CUDA_cufft_LIBRARY)
-endif(CUDA_cufft_LIBRARY)
-
-
-CUDA_ADD_LIBRARY(${PROJ_NAME} 
+ADD_LIBRARY(${PROJ_NAME} 
 	SHARED 
-	${PROJ_SOURCES} 
-	${PROJ_HEADERS} 
-	OPTIONS -arch sm_21 #--ptxas-options=-v 
+	"./cunfft_wrapper.cu"
+	"./cunfft_kernel.cu"
+	"./cunfft.cu"
+	"./c_util.cu"
+	"./cuda_util.cu"
 	)
 
-#target_link_libraries(${PROJ_NAME} nfft3 )
+message(STATUS "PRJOECT NAME = ${PROJ_NAME}")
+#target_compile_options(${PROJ_NAME} PRIVATE -arch sm_61)
+
+target_link_libraries(${PROJ_NAME} nfft3 )
 
 #Linking with libcufft (expected to be in 
-CUDA_ADD_CUFFT_TO_TARGET(${PROJ_NAME})
 
 SET_TARGET_PROPERTIES(${PROJ_NAME} 
 	PROPERTIES
@@ -87,12 +53,11 @@ SET_TARGET_PROPERTIES(${PROJ_NAME}
 )
 
 #create executable demo
-CUDA_ADD_EXECUTABLE(${PROJ_EXAMPLE_FILE} ${PROJ_EXAMPLE_DIR}/${PROJ_EXAMPLE_FILE}.cpp)
-TARGET_LINK_LIBRARIES(${PROJ_EXAMPLE_FILE} ${PROJ_NAME})
+
+#ADD_EXECUTABLE(${PROJ_EXAMPLE_FILE} ${PROJ_EXAMPLE_DIR}/${PROJ_EXAMPLE_FILE}.cpp)
+#TARGET_LINK_LIBRARIES(${PROJ_EXAMPLE_FILE} ${PROJ_NAME})
 
 
-
-CUDA_BUILD_CLEAN_TARGET()
 
 
 ################################################################
