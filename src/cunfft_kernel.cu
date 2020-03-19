@@ -26,7 +26,7 @@
 #include <assert.h>
 #include <cuda_runtime.h>
 
-#include "cunfft_kernel.cuh"
+#include <CUNFFT/cunfft_kernel.cuh>
 
 
 

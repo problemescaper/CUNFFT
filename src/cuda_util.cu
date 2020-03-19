@@ -24,7 +24,7 @@
  * @brief Utilities for CUDA
  */
 
-#include "cunfft_util.h"
+#include <CUNFFT/cunfft_util.h>
 //------------------------------------------------------------------------------
 // 		HELPER FUNCTION FOR MEMORY INFORMATIONS
 //------------------------------------------------------------------------------

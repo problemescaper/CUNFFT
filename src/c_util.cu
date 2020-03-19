@@ -24,7 +24,7 @@
  * @brief Utilities for C
  */
 
-#include "cunfft_util.h"
+#include <CUNFFT/cunfft_util.h>
 
 
 void showCPUMemUse(cunfft_plan *p)

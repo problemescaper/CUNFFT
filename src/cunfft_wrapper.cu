@@ -7,7 +7,7 @@
 
 
 
-#include "cunfft_kernel.cuh"
+#include <CUNFFT/cunfft_kernel.cuh>
 
 #ifdef COM_FG_PSI
 #define CONF_STRING " FG_PSI "

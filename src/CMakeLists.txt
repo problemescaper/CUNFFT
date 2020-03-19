@@ -1,73 +1,44 @@
+cmake_minimum_required(VERSION 3.15)
+find_package(gsl-lite 0.35.3 REQUIRED)
+find_package(cuda-api-wrappers REQUIRED)
 
-# src inc header 
-INCLUDE_DIRECTORIES(${PROJ_INCLUDE_DIR})
-#CUDA_INCLUDE_DIRECTORIES("/usr/local/cuda-5.5/samples/common/inc/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
+                      "${PROJECT_SOURCE_DIR}/cmake/modules/")
 
-# check included cuda header can be found
-set(CUFFT_INC_DIR "${CUFFT_INC_DIR}-NOTFOUND")
-# cufft.h
-FIND_PATH(CUFFT_INC_DIR 
-	NAMES cufft.h 
-	PATHS  
-		${CUDA_SDK_ROOT_DIR}
-	 	${CUDA_SDK_ROOT_DIR}/C/common/inc
-		${CUDA_SDK_ROOT_DIR}/CUDALibraries/common/inc
-    	DOC "cufft header location."
-     )
+find_package(NFFT REQUIRED)
 
-if(CUFFT_INC_DIR)
-	message(STATUS "CHECK PATH cufft.h: ${CUFFT_INC_DIR}/cufft.h")
-else(CUFFT_INC_DIR)
-	EXECUTE_PROCESS(COMMAND locate cufft.h OUTPUT_VARIABLE FILE_LIST )
-	FIND_PATH(CUFFT_INC_DIR 
-	NAMES cufft.h 
-	PATHS  
-		${FILE_LIST}/..
-    	DOC "cufft header location."
-     )
-	message(STATUS "CHECK PATH cufft.h: ${CUFFT_INC_DIR}/cufft.h\n")
-endif(CUFFT_INC_DIR)
-
-
-
-ADD_LIBRARY(${PROJ_NAME} 
-	SHARED 
+# targets
+add_library(CUNFFT 
 	"./cunfft_wrapper.cu"
 	"./cunfft_kernel.cu"
 	"./cunfft.cu"
 	"./c_util.cu"
 	"./cuda_util.cu"
-	)
-
-message(STATUS "PRJOECT NAME = ${PROJ_NAME}")
-#target_compile_options(${PROJ_NAME} PRIVATE -arch sm_61)
-
-target_link_libraries(${PROJ_NAME} nfft3 )
-
-#Linking with libcufft (expected to be in 
-
-SET_TARGET_PROPERTIES(${PROJ_NAME} 
-	PROPERTIES
-	VERSION ${cunfft_VERSION}
-  	SOVERSION ${cunfft_VERSION_MAJOR}.${cunfft_VERSION_MINOR}
 )
 
-#create executable demo
+# library properties
+target_include_directories(
+  CUNFFT
+  PUBLIC
+  "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
+)
 
-#ADD_EXECUTABLE(${PROJ_EXAMPLE_FILE} ${PROJ_EXAMPLE_DIR}/${PROJ_EXAMPLE_FILE}.cpp)
-#TARGET_LINK_LIBRARIES(${PROJ_EXAMPLE_FILE} ${PROJ_NAME})
+target_compile_features(CUNFFT INTERFACE cxx_std_14)
+# set_target_properties(CUNFFT PROPERTIES CUDA_STANDARD 14)
 
+# library dependencies
+target_link_libraries(
+  CUNFFT
+  INTERFACE
+    gsl::gsl-lite-v1
+    nfft
+    cuda-api-wrappers::cuda-api-wrappers
+)
 
-
-
-################################################################
-## installation of library
-################################################################
-
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${PROJ_EXAMPLE_FILE} DESTINATION ${PROJ_EXAMPLE_DIR})
-INSTALL(TARGETS ${PROJ_NAME} LIBRARY DESTINATION ${PROJ_LIBRARY_DIR})
-
-
-
-
-
+# installation: public header files, target
+install(
+  DIRECTORY
+    "${PROJECT_SOURCE_DIR}/include/" # the trailing '/' is significant
+  TYPE INCLUDE
+)
+install(TARGETS CUNFFT EXPORT CUNFFT ARCHIVE INCLUDES)

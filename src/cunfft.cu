@@ -24,7 +24,7 @@
  * @brief CUDA calling functions source file
  */
 
-#include "cunfft_kernel.cuh"
+#include <CUNFFT/cunfft_kernel.cuh>
 //------------------------------------------------------------------------------
 // 		FG_PSI COMPUTATION FUNCTION
 //------------------------------------------------------------------------------
