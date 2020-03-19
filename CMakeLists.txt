@@ -10,6 +10,10 @@ project(
   LANGUAGES C CXX CUDA
 )
 
+set(CUDA_ARCHITECTURE "compute_61" CACHE STRING "CUDA architecture")
+set(CUDA_CODE "sm_61,sm_75" CACHE STRING "CUDA code")
+
+
 # Include target definitions.
 add_subdirectory(src)
 
