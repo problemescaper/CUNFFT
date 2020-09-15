@@ -47,6 +47,7 @@ endif()
 
 target_compile_features(CUNFFT PUBLIC cxx_std_14)
 # set_target_properties(CUNFFT PROPERTIES CUDA_STANDARD 14)
+set_target_properties(CUNFFT PROPERTIES CUDA_ARCHITECTURES 61)
 
 # library dependencies
 target_link_libraries(
