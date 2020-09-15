@@ -23,8 +23,7 @@
 
 /**\def CUNFFT_DOUBLE_PRECISION 
 * Enable double precision computation (cmakedefine)*/
-#define CUNFFT_DOUBLE_PRECISION 
-
+// #define CUNFFT_DOUBLE_PRECISION 
 /**\def LARGE_INPUT 
 * Use LONG INT instead of INT (cmakedefine)*/
 #define LARGE_INPUT

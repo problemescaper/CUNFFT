@@ -398,15 +398,15 @@ void cunfft_finalize(cunfft_plan *plan)
 	FG_PSI_FREE(plan->fg_exp_l_cpu)
 
 	// free cpu mem
-	cudaVerify(cudaFreeHost(plan->x));
-	cudaVerify(cudaFreeHost(plan->f_hat));
+	//cudaVerify(cudaFreeHost(plan->x));
+	//cudaVerify(cudaFreeHost(plan->f_hat));
 	free(plan->sigma);
 	free(plan->n);
 	free(plan->N);
 	free(plan->b);
 	cunfft_finalizeDevice(plan);
 	cudaVerify(cudaThreadSynchronize());
-	cudaVerify(cudaDeviceReset());
+	//cudaVerify(cudaDeviceReset());
 }
 
 
@@ -440,7 +440,7 @@ void cundft_adjoint(cunfft_plan *plan)
 
 void resetDevice()
 {
-	cudaVerify(cudaDeviceReset());
+	//cudaVerify(cudaDeviceReset());
 }
 
 
