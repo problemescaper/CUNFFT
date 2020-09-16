@@ -44,7 +44,7 @@ double cuKernelRolloffCorrection(cunfft_plan *plan)
 	switch (plan->d) {
 	case 1:
 		getComputationGridParams_Array(&blockDim, &gridDim, off_N[0]);
-		CONFIG_OUT("kernelRollOf", gridDim, blockDim,plan->d);
+	//	CONFIG_OUT("kernelRollOf", gridDim, blockDim,plan->d);
 		T_GPU(t0);
 		cudaVerifyKernel((kernelRollOf_1d<<<gridDim, blockDim>>>
 				(plan->fhat_gpu,plan->g_gpu,off_n[0],off_N[0])));
@@ -53,7 +53,7 @@ double cuKernelRolloffCorrection(cunfft_plan *plan)
 		break;
 	case 2:
 		getComputationGridParams_Matrix(&blockDim, &gridDim,off_N[0], off_N[1]);
-		CONFIG_OUT("kernelRollOf", gridDim, blockDim,plan->d);
+	//	CONFIG_OUT("kernelRollOf", gridDim, blockDim,plan->d);
 		T_GPU(t0);
 		cudaVerifyKernel((kernelRollOf_2d<<<gridDim, blockDim>>>
 				(plan->fhat_gpu,plan->g_gpu,off_n[0],off_n[1],off_N[0],off_N[1])));
@@ -62,7 +62,7 @@ double cuKernelRolloffCorrection(cunfft_plan *plan)
 		break;
 	default:
 		getComputationGridParams_Matrix(&blockDim, &gridDim,off_N[1], off_N[2]);
-		CONFIG_OUT("kernelRollOf", gridDim, blockDim,plan->d);
+	//	CONFIG_OUT("kernelRollOf", gridDim, blockDim,plan->d);
 		T_GPU(t0);
 		cudaVerifyKernel((kernelRollOf_3d<<<gridDim, blockDim>>>
 				(plan->fhat_gpu,plan->g_gpu,off_n[0],off_n[1],off_n[2],off_N[0],
@@ -89,7 +89,7 @@ double cuKernelRollOffCorrection_adjoint(cunfft_plan *plan)
 	switch (plan->d) {
 	case 1:
 		getComputationGridParams_Array(&blockDim, &gridDim,  off_N[0]);
-		CONFIG_OUT("kernelRollOf__adjoint", gridDim, blockDim,plan->d);
+	//	CONFIG_OUT("kernelRollOf__adjoint", gridDim, blockDim,plan->d);
 		T_GPU(t0);
 		cudaVerifyKernel((kernelRollOf_adjoint_1d<<<gridDim, blockDim>>>
 				(plan->g_gpu,plan->fhat_gpu,off_n[0],off_N[0])));
@@ -99,7 +99,7 @@ double cuKernelRollOffCorrection_adjoint(cunfft_plan *plan)
 	case 2:
 		getComputationGridParams_Matrix(&blockDim, &gridDim,  off_N[0], off_N[1]);
 
-		CONFIG_OUT("kernelRollOf__adjoint", gridDim, blockDim,plan->d);
+	//	CONFIG_OUT("kernelRollOf__adjoint", gridDim, blockDim,plan->d);
 		T_GPU(t0);
 		cudaVerifyKernel((kernelRollOf_adjoint_2d<<<gridDim, blockDim>>>
 				(plan->g_gpu,plan->fhat_gpu,off_n[0],off_n[1],off_N[0],off_N[1])));
@@ -108,7 +108,7 @@ double cuKernelRollOffCorrection_adjoint(cunfft_plan *plan)
 		break;
 	default:
 		getComputationGridParams_Matrix(&blockDim, &gridDim,  off_N[1], off_N[2]);
-		CONFIG_OUT("kernelRollOf__adjoint", gridDim, blockDim,plan->d);
+	//	CONFIG_OUT("kernelRollOf__adjoint", gridDim, blockDim,plan->d);
 		T_GPU(t0);
 		cudaVerifyKernel((kernelRollOf_adjoint_3d<<<gridDim, blockDim>>>
 				(plan->g_gpu,plan->fhat_gpu,off_n[0],off_n[1],off_n[2],
@@ -147,7 +147,7 @@ double cuConvolution(cunfft_plan *plan)
 
 	char str[25]="convolution";
 	strcat(str,CONF_STRING);
-	CONFIG_OUT(str, gridDim, blockDim,plan->d);
+	//CONFIG_OUT(str, gridDim, blockDim,plan->d);
 
 	ALLOC_TEXTURE;
 	switch (plan->d) {
@@ -183,7 +183,7 @@ double cuConvolution_adjoint(cunfft_plan *plan)
 	getComputationGridParams_Array(&blockDim, &gridDim,  plan->M_total);
 	char str[35]="convolution adjoint";
 	strcat(str,CONF_STRING);
-	CONFIG_OUT(str, gridDim, blockDim,plan->d);
+//	CONFIG_OUT(str, gridDim, blockDim,plan->d);
 
 	GPUTimer t0;
 
@@ -334,7 +334,7 @@ void cuNDFT(cunfft_plan *plan)
 {
 	dim3 blockDim,gridDim;
 	getComputationGridParams_Array(&blockDim, &gridDim,	plan->M_total);
-	CONFIG_OUT("kernelndft", gridDim, blockDim,plan->d);
+//	CONFIG_OUT("kernelndft", gridDim, blockDim,plan->d);
 	switch (plan->d) {
 	case 1:
 		cudaVerifyKernel((kernelNDFT_1d<<<gridDim,blockDim>>>
@@ -359,7 +359,7 @@ void cuNDFT_adjoint(cunfft_plan *plan)
 	dim3 blockDim,gridDim;
 	getComputationGridParams_Array(&blockDim, &gridDim,	plan->N_total);
 
-	CONFIG_OUT("kernelndft_adjoint", gridDim, blockDim,plan->d);
+//	CONFIG_OUT("kernelndft_adjoint", gridDim, blockDim,plan->d);
 	switch (plan->d) {
 	case 1:
 		cudaVerifyKernel((kernelNDFT_adjoint_1d<<<gridDim,blockDim>>>
