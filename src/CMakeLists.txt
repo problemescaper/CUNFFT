@@ -55,7 +55,7 @@ target_link_libraries(
   PUBLIC
     gsl::gsl-lite-v1
     nfft
-    cuda-api-wrappers::cuda-api-wrappers
+    cuda-api-wrappers::runtime-api
 )
 
 # installation: public header files, target
