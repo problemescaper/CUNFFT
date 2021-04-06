@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 find_package(gsl-lite 0.35.3 REQUIRED)
 find_package(cuda-api-wrappers REQUIRED)
 find_package(CMakeshift 3.7 REQUIRED)
+find_package(CUDA REQUIRED)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
                       "${PROJECT_SOURCE_DIR}/cmake/modules/")
@@ -38,6 +39,7 @@ if(CMAKE_CUDA_COMPILER_ID MATCHES "NVIDIA")
     )
 endif()
 
+#target_compile_options(CUNFFT PRIVATE -O3 --use_fast_math)
 #cmakeshift_target_compile_settings(
 #    CUNFFT
 #    PRIVATE
@@ -55,7 +57,8 @@ target_link_libraries(
   PUBLIC
     gsl::gsl-lite-v1
     nfft
-    cuda-api-wrappers::runtime-api
+    cuda-api-wrappers::cuda-api-wrappers
+	cuda
 )
 
 # installation: public header files, target
